@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penghitung WR MLBB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #2b2b36; color: white; }
+        .btn-orange { background-color: #cc8400; }
+        .btn-orange:hover { background-color: #a36a00; }
+        .input-dark { background-color: #1e1e24; border: 1px solid #4a4a5a; }
+        .input-dark:focus { border-color: #f97316; outline: none; }
+        /* Animasi halus untuk pop-up hasil */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInDown 0.4s ease-out forwards; }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col">
+
+   <!-- NAVBAR LEBIH BESAR -->
+    <nav class="bg-[#1e1e24] border-b border-gray-700 px-10 py-6 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+        <div class="text-orange-500 font-black text-3xl tracking-widest uppercase hover:scale-105 transition transform duration-200">
+            <a href="/">[INFO MLBB]</a>
+        </div>
+        <div class="flex space-x-10 text-lg font-bold tracking-wide">
+            <a href="/" class="text-orange-400 border-b-4 border-orange-400 pb-2">HERO</a>
+            <a href="/kalkulator" class="text-gray-400 hover:text-orange-400 transition duration-300">KALKULATOR</a>
+        </div>
+    </nav>
+
+    <div class="flex-grow flex flex-col items-center pt-10 px-4 pb-12 w-full max-w-5xl mx-auto">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black text-white mb-2">Kalkulator <span class="text-orange-500">Win Rate</span></h1>
+            <p class="text-gray-400 text-sm">Pilih mode perhitungan yang kamu butuhkan di bawah ini.</p>
+        </div>
+
+        <% if (hasil) { %>
+            <div class="mb-10 text-center bg-[#1e1e24] border-2 border-orange-500 p-6 rounded-2xl shadow-[0_0_20px_rgba(204,132,0,0.3)] w-full max-w-2xl animate-fade-in">
+                <h2 class="text-sm font-bold text-gray-400 mb-4 border-b border-gray-700 pb-2 uppercase tracking-widest">Hasil Kalkulasi</h2>
+                
+                <% if (!input.target_wr) { %>
+                    <div class="flex justify-around items-center">
+                        <div>
+                            <p class="text-sm text-gray-400 mb-1">Total Win</p>
+                            <p class="font-black text-orange-400 text-4xl"><%= hasil.totalWin %> <span class="text-lg font-bold text-gray-500">Match</span></p>
+                        </div>
+                        <div class="h-16 w-px bg-gray-600"></div>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-1">Total Lose</p>
+                            <p class="font-black text-gray-300 text-4xl"><%= hasil.totalLose %> <span class="text-lg font-bold text-gray-500">Match</span></p>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <p class="text-md text-gray-300">Untuk mencapai target WR <span class="font-bold text-white"><%= input.target_wr %>%</span>, kamu membutuhkan:</p>
+                    <p class="font-black text-orange-500 text-6xl my-2"><%= hasil.neededWinStreak %></p>
+                    <p class="text-lg font-bold text-orange-400 uppercase tracking-wider">Win Tanpa Kalah (Win Streak)</p>
+                <% } %>
+            </div>
+        <% } %>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            
+            <div class="bg-[#32323e] p-8 rounded-2xl shadow-xl border border-gray-700 hover:border-orange-500 transition duration-300">
+                <h2 class="text-xl font-bold text-orange-400 mb-2">Cek Win / Lose</h2>
+                <p class="text-xs text-gray-400 mb-6">Hitung jumlah pasti kemenangan dan kekalahan dari statistik total match kamu saat ini.</p>
+                
+                <form action="/kalkulator/hitung" method="POST" class="space-y-5">
+                    <div>
+                        <label class="block text-sm mb-1 font-semibold text-gray-200">Total Match</label>
+                        <input type="number" name="total_match" placeholder="Contoh: 1112" value="<%= (!input.target_wr && input.total_match) ? input.total_match : '' %>" required class="input-dark w-full p-3 text-white rounded-lg transition duration-200">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1 font-semibold text-gray-200">Total WR Anda (%)</label>
+                        <input type="number" step="0.1" name="current_wr" placeholder="Contoh: 90.5" value="<%= (!input.target_wr && input.current_wr) ? input.current_wr : '' %>" required class="input-dark w-full p-3 text-white rounded-lg transition duration-200">
+                    </div>
+                    <button type="submit" class="btn-orange w-full py-3 mt-4 font-bold rounded-lg text-white shadow-lg transform active:scale-95 transition">Hitung Win / Lose</button>
+                </form>
+            </div>
+
+            <div class="bg-[#32323e] p-8 rounded-2xl shadow-xl border border-gray-700 hover:border-orange-500 transition duration-300">
+                <h2 class="text-xl font-bold text-orange-400 mb-2">Hitung Target WR</h2>
+                <p class="text-xs text-gray-400 mb-6">Prediksi jumlah win streak beruntun yang wajib kamu capai untuk menaikkan win rate.</p>
+                
+                <form action="/kalkulator/hitung" method="POST" class="space-y-5">
+                    <div>
+                        <label class="block text-sm mb-1 font-semibold text-gray-200">Total Match</label>
+                        <input type="number" name="total_match" placeholder="Contoh: 272" value="<%= (input.target_wr && input.total_match) ? input.total_match : '' %>" required class="input-dark w-full p-3 text-white rounded-lg transition duration-200">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm mb-1 font-semibold text-gray-200">WR Saat Ini (%)</label>
+                            <input type="number" step="0.1" name="current_wr" placeholder="Contoh: 78.2" value="<%= (input.target_wr && input.current_wr) ? input.current_wr : '' %>" required class="input-dark w-full p-3 text-white rounded-lg transition duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1 font-semibold text-gray-200">Target WR (%)</label>
+                            <input type="number" step="0.1" name="target_wr" placeholder="Contoh: 80" value="<%= input.target_wr || '' %>" required class="input-dark w-full p-3 text-white rounded-lg transition duration-200 border-b-2 border-orange-500">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-orange w-full py-3 mt-4 font-bold rounded-lg text-white shadow-lg transform active:scale-95 transition">Hitung Target Win</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLBB Hero Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #2b2b36; color: white; }
+    </style>
+</head>
+<body class="font-sans min-h-screen">
+
+  <!-- NAVBAR LEBIH BESAR -->
+    <nav class="bg-[#1e1e24] border-b border-gray-700 px-10 py-6 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+        <div class="text-orange-500 font-black text-3xl tracking-widest uppercase hover:scale-105 transition transform duration-200">
+            <a href="/">[INFO MLBB]</a>
+        </div>
+        <div class="flex space-x-10 text-lg font-bold tracking-wide">
+            <a href="/" class="text-orange-400 border-b-4 border-orange-400 pb-2">HERO</a>
+            <a href="/kalkulator" class="text-gray-400 hover:text-orange-400 transition duration-300">KALKULATOR</a>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-8 pt-10">
+        <div class="border-b border-gray-600 pb-2 mb-6">
+            <h1 class="text-2xl font-bold">Daftar Meta Hero</h1>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <% heroes.forEach(hero => { %>
+                <div class="bg-[#32323e] p-4 rounded-lg text-center hover:bg-gray-700 hover:scale-105 transition transform duration-200 cursor-pointer shadow-lg border border-gray-600">
+                    <img src="<%= hero.portrait %>" alt="<%= hero.hero_name %>" class="w-20 h-20 mx-auto rounded-full mb-3 object-cover border-2 border-orange-500">
+                    <h2 class="font-bold text-md truncate"><%= hero.hero_name %></h2>
+                    <p class="text-xs text-gray-400 uppercase tracking-wide mt-1"><%= hero.class %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+</body>
+</html>
