@@ -1,79 +1,136 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detail Hero - <%= hero.hero_name %></title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Meta - <%= hero.hero_name %></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      body {
-        background-color: #2b2b36;
-        color: white;
-      }
+        body { background-color: #1a1a22; color: #e2e8f0; }
+        .neon-border { border: 1px solid rgba(249, 115, 22, 0.2); box-shadow: 0 0 15px rgba(249, 115, 22, 0.05); }
     </style>
-  </head>
-  <body class="font-sans min-h-screen flex flex-col">
+</head>
+<body class="font-sans min-h-screen flex flex-col">
+
     <!-- NAVBAR -->
-    <nav
-      class="bg-[#1e1e24] border-b border-gray-700 px-10 py-6 flex justify-between items-center shadow-lg"
-    >
-      <div
-        class="text-orange-500 font-black text-3xl tracking-widest uppercase"
-      >
-        <a href="/">[INFO MLBB]</a>
-      </div>
-      <div class="flex space-x-10 text-lg font-bold tracking-wide">
-        <a href="/" class="text-orange-400">HERO</a>
-        <a
-          href="/kalkulator"
-          class="text-gray-400 hover:text-orange-400 transition duration-300"
-          >KALKULATOR</a
-        >
-      </div>
+    <nav class="bg-[#111116] border-b border-gray-800 px-10 py-5 flex justify-between items-center shadow-2xl sticky top-0 z-50">
+        <div class="text-orange-500 font-black text-2xl tracking-widest uppercase">
+            <a href="/">[INFO MLBB]</a>
+        </div>
+        <div class="flex space-x-8 text-md font-bold tracking-wide">
+            <a href="/" class="text-orange-400">HERO</a>
+            <a href="/kalkulator" class="text-gray-400 hover:text-orange-400 transition duration-300">KALKULATOR</a>
+        </div>
     </nav>
 
-    <!-- KONTEN DETAIL HERO -->
-    <div class="flex-grow flex items-center justify-center p-6">
-      <div
-        class="bg-[#32323e] p-8 rounded-2xl shadow-2xl border border-gray-700 max-w-md w-full text-center relative overflow-hidden"
-      >
-        <div class="absolute top-0 left-0 w-full h-2 bg-orange-500"></div>
+    <!-- UTAMA CONTAINER -->
+    <main class="max-w-6xl mx-auto p-6 md:p-10 w-full flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- KOLOM KIRI: PROFIL IDENTITAS -->
+        <div class="space-y-6">
+            <div class="bg-[#1e1e26] p-6 rounded-2xl text-center neon-border relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-500 to-red-600"></div>
+                <img src="<%= hero.portrait %>" alt="<%= hero.hero_name %>" class="w-32 h-32 mx-auto rounded-full mb-4 object-cover border-4 border-orange-500/80 shadow-2xl">
+                <h1 class="text-3xl font-black tracking-tight text-white mb-1"><%= hero.hero_name %></h1>
+                
+                <div class="flex flex-wrap justify-center gap-2 mt-3">
+                    <span class="bg-orange-500/10 text-orange-400 text-xs font-bold px-3 py-1 rounded-md border border-orange-500/20 uppercase"><%= hero.class %></span>
+                    <% (hero.speciality || []).forEach(spec => { %>
+                        <span class="bg-gray-800 text-gray-300 text-xs font-bold px-3 py-1 rounded-md uppercase"><%= spec %></span>
+                    <% }) %>
+                </div>
 
-        <img
-          src="<%= hero.portrait %>"
-          alt="<%= hero.hero_name %>"
-          class="w-32 h-32 mx-auto rounded-full mb-4 object-cover border-4 border-orange-500 shadow-xl"
-        />
+                <div class="mt-6 pt-6 border-t border-gray-800 text-left space-y-3">
+                    <div class="flex justify-between text-sm"><span class="text-gray-400">Rekomendasi Lane:</span><span class="text-orange-400 font-bold uppercase text-xs"><%= (hero.laning || []).join(', ') %></span></div>
+                    <div class="flex justify-between text-sm"><span class="text-gray-400">ID Hero/Database:</span><span class="text-gray-200 font-mono text-xs"><%= hero.id || '-' %></span></div>
+                </div>
+            </div>
 
-        <h1 class="text-3xl font-black text-white mb-1">
-          <%= hero.hero_name %>
-        </h1>
-        <span
-          class="inline-block bg-[#1e1e24] text-orange-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-orange-500/30"
-        >
-          <%= hero.class %>
-        </span>
+           <!-- KOTAK SYNERGY & COUNTER (GAMBAR ICON LIST BISA DI-KLIK) -->
+            <div class="bg-[#1e1e26] p-6 rounded-2xl neon-border space-y-6">
+                <div>
+                    <h3 class="text-sm font-black uppercase text-red-400 tracking-wider mb-3">⚠️ Best Counters (Di-counter oleh):</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <% if(counters.length > 0) { %>
+                            <% counters.forEach(c => { %>
+                                <!-- MEMBUNGKUS ICON DENGAN LINK ROUTE DETAIL HERO -->
+                                <a href="/hero/<%= c.heroname.toLowerCase().replace(/\s+/g, '-') %>" class="group relative block">
+                                    <img src="<%= c.portrait %>" alt="<%= c.heroname %>" class="w-12 h-12 rounded-full border-2 border-red-500/40 object-cover bg-gray-900 shadow-md transform group-hover:scale-110 group-hover:border-red-500 transition duration-200">
+                                    <span class="absolute bottom-full left-1/2 -translate-x-1/2 bg-black text-[10px] text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition whitespace-nowrap mb-1 z-10 shadow-lg"><%= c.heroname %></span>
+                                </a>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-xs text-gray-500 italic">Data counter belum tersedia.</p>
+                        <% } %>
+                    </div>
+                </div>
 
-        <div
-          class="bg-[#1e1e24] p-4 rounded-xl text-left border border-gray-700 space-y-3"
-        >
-          <p class="text-sm text-gray-400">
-            <strong class="text-gray-200">Rekomendasi Lane:</strong> High
-            Priority Meta
-          </p>
-          <p class="text-sm text-gray-400">
-            <strong class="text-gray-200">Tipe Serangan:</strong> Mekanik
-            Turnamen
-          </p>
+                <div class="pt-4 border-t border-gray-800">
+                    <h3 class="text-sm font-black uppercase text-green-400 tracking-wider mb-3">🤝 Best Synergies (Sinergi Bagus):</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <% if(synergies.length > 0) { %>
+                            <% synergies.forEach(s => { %>
+                                <!-- MEMBUNGKUS ICON DENGAN LINK ROUTE DETAIL HERO -->
+                                <a href="/hero/<%= s.heroname.toLowerCase().replace(/\s+/g, '-') %>" class="group relative block">
+                                    <img src="<%= s.portrait %>" alt="<%= s.heroname %>" class="w-12 h-12 rounded-full border-2 border-green-500/40 object-cover bg-gray-900 shadow-md transform group-hover:scale-110 group-hover:border-green-500 transition duration-200">
+                                    <span class="absolute bottom-full left-1/2 -translate-x-1/2 bg-black text-[10px] text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition whitespace-nowrap mb-1 z-10 shadow-lg"><%= s.heroname %></span>
+                                </a>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-xs text-gray-500 italic">Data sinergi belum tersedia.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <a
-          href="/"
-          class="block text-center mt-6 text-sm font-bold text-gray-400 hover:text-orange-500 transition duration-200"
-        >
-          ← Kembali ke Daftar Hero
-        </a>
-      </div>
-    </div>
-  </body>
+        <!-- KOLOM KANAN: LIST DETAIL SKILL (GRID 2 KOLOM) -->
+        <div class="lg:col-span-2 space-y-4">
+            <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2 mb-2">
+                <span class="w-2 h-6 bg-orange-500 rounded-sm"></span> Informasi Detail Skill Hero
+            </h2>
+            
+            <div class="space-y-4">
+                <%
+                    // Hitung urutan skill aktif (skill 1, skill 2, dst) dan tandai yang terakhir sebagai ULTI.
+                    // Otomatis menyesuaikan walau hero punya lebih dari 3 skill aktif (mis. 4 skill aktif).
+                    const activeSkills = (hero.skills || []).filter(sk => sk.type !== 'passive');
+                    const getSkillLabel = (skill) => {
+                        if (skill.type === 'passive') return 'PASIF';
+                        const idx = activeSkills.indexOf(skill);
+                        return (idx === activeSkills.length - 1) ? 'ULTI' : `SKILL ${idx + 1}`;
+                    };
+                %>
+                <% (hero.skills || []).forEach(skill => { %>
+                    <div class="bg-[#1e1e26] p-5 rounded-2xl border border-gray-800 hover:border-gray-700 transition flex gap-4 items-start shadow-md">
+                        <div class="bg-gray-900 p-2 rounded-xl border border-gray-700/60 shrink-0">
+                            <div class="w-12 h-12 font-black text-[10px] text-orange-400 flex items-center justify-center uppercase bg-[#141419] rounded-lg border border-orange-500/20 shadow-inner text-center leading-none px-0.5">
+                                <%= getSkillLabel(skill) %>
+                            </div>
+                        </div>
+                        <div class="space-y-1 w-full">
+                            <div class="flex justify-between items-baseline flex-wrap gap-2">
+                                <h3 class="text-md font-bold text-white tracking-wide"><%= skill.skill_name %></h3>
+                                <span class="text-[10px] uppercase font-mono tracking-widest px-2 py-0.5 rounded bg-gray-800 text-gray-400 border border-gray-700"><%= skill.type %></span>
+                            </div>
+                            <div class="flex gap-4 text-xs font-mono text-gray-400 pt-1 pb-2">
+                                <div>⏳ CD: <span class="text-gray-200"><%= skill.cooldown %>s</span></div>
+                                <div>💧 Mana: <span class="text-gray-200"><%= skill.manacost %></span></div>
+                            </div>
+                            <p class="text-sm text-gray-400 leading-relaxed text-justify pt-1 border-t border-gray-800/60"><%= skill.description %></p>
+                        </div>
+
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="pt-4">
+                <a href="/" class="inline-block text-sm font-bold text-gray-500 hover:text-orange-500 transition duration-200">
+                    ← Kembali ke Dashboard Daftar Hero
+                </a>
+            </div>
+        </div>
+    </main>
+
+</body>
 </html>

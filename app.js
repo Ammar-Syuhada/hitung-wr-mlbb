@@ -39,22 +39,65 @@ app.get("/kalkulator", (req, res) => {
   res.render("kalkulator", { hasil: null, input: {} });
 });
 
-// ROUTE BARU: DETAIL HERO (RILIS V1.1.0)
+// ROUTE DETAIL HERO - normalisasi nama dengan strip SEMUA spasi & strip (-)
+// baik dari URL param maupun dari hero_name di database, jadi gak masalah
+// walau nama hero-nya sendiri mengandung tanda hubung (mis. "Lapu-Lapu", "Yi Sun-shin")
+// atau lebih dari 2 kata (mis. "Popol and Kupa").
 app.get("/hero/:name", (req, res) => {
-  const heroName = req.params.name;
-  // Membaca data hero dari file json kamu
-  const heroesData = require("./data/hero-meta-final.json");
+  // 1. Bersihkan parameter URL dari spasi dan tanda minus
+  const targetName = req.params.name.toLowerCase().replace(/[\s-]/g, "");
 
-  // Cari hero yang namanya cocok
-  const hero = heroesData.find(
-    (h) => h.hero_name.toLowerCase() === heroName.toLowerCase(),
-  );
+  try {
+    const jsonPath = path.join(__dirname, "data", "hero-meta-final.json");
+    const rawData = fs.readFileSync(jsonPath, "utf-8");
+    const heroesData = JSON.parse(rawData);
+    const arrayHero = heroesData.data;
 
-  if (!hero) {
-    return res.status(404).send("Hero tidak ditemukan");
+    // 2. Cari hero dengan membandingkan targetName secara presisi
+    const hero = arrayHero.find(
+      (h) => h.hero_name.toLowerCase().replace(/[\s-]/g, "") === targetName,
+    );
+
+    if (!hero) {
+      return res.status(404).send("Hero tidak ditemukan banh!");
+    }
+
+    // 3. Ambil gambar counter secara dinamis
+    const mappedCounters = (hero.counters || []).map((c) => {
+      const found = arrayHero.find(
+        (h) => h.hero_name.toLowerCase() === c.heroname.toLowerCase(),
+      );
+      return {
+        heroname: c.heroname,
+        portrait: found
+          ? found.portrait
+          : "https://placehold.co/100x100?text=MLBB",
+      };
+    });
+
+    // 4. Ambil gambar synergy secara dinamis
+    const mappedSynergies = (hero.synergies || []).map((s) => {
+      const found = arrayHero.find(
+        (h) => h.hero_name.toLowerCase() === s.heroname.toLowerCase(),
+      );
+      return {
+        heroname: s.heroname,
+        portrait: found
+          ? found.portrait
+          : "https://placehold.co/100x100?text=MLBB",
+      };
+    });
+
+    // 5. Kirim variabel yang sudah benar ke detail.ejs
+    res.render("detail", {
+      hero,
+      counters: mappedCounters,
+      synergies: mappedSynergies,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Terjadi kesalahan internal server.");
   }
-
-  res.render("detail", { hero });
 });
 
 app.post("/kalkulator/hitung", (req, res) => {
