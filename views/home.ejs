@@ -27,14 +27,16 @@
             <h1 class="text-2xl font-bold">Daftar Meta Hero</h1>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <% heroes.forEach(hero => { %>
+       <% heroes.forEach(hero => { %>
+            <!-- Tambahkan pembungkus link tag href menuju route detail -->
+            <a href="/hero/<%= hero.hero_name.toLowerCase() %>" class="block">
                 <div class="bg-[#32323e] p-4 rounded-lg text-center hover:bg-gray-700 hover:scale-105 transition transform duration-200 cursor-pointer shadow-lg border border-gray-600">
                     <img src="<%= hero.portrait %>" alt="<%= hero.hero_name %>" class="w-20 h-20 mx-auto rounded-full mb-3 object-cover border-2 border-orange-500">
                     <h2 class="font-bold text-md truncate"><%= hero.hero_name %></h2>
                     <p class="text-xs text-gray-400 uppercase tracking-wide mt-1"><%= hero.class %></p>
                 </div>
-            <% }) %>
+            </a>
+        <% }) %>
         </div>
     </div>
 

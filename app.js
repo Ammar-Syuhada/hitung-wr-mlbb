@@ -39,6 +39,24 @@ app.get("/kalkulator", (req, res) => {
   res.render("kalkulator", { hasil: null, input: {} });
 });
 
+// ROUTE BARU: DETAIL HERO (RILIS V1.1.0)
+app.get("/hero/:name", (req, res) => {
+  const heroName = req.params.name;
+  // Membaca data hero dari file json kamu
+  const heroesData = require("./data/hero-meta-final.json");
+
+  // Cari hero yang namanya cocok
+  const hero = heroesData.find(
+    (h) => h.hero_name.toLowerCase() === heroName.toLowerCase(),
+  );
+
+  if (!hero) {
+    return res.status(404).send("Hero tidak ditemukan");
+  }
+
+  res.render("detail", { hero });
+});
+
 app.post("/kalkulator/hitung", (req, res) => {
   const { total_match, current_wr, target_wr } = req.body;
   const hasil = calculateWr(

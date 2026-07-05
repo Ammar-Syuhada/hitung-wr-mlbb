@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Hero - <%= hero.hero_name %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-color: #2b2b36;
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="font-sans min-h-screen flex flex-col">
+    <!-- NAVBAR -->
+    <nav
+      class="bg-[#1e1e24] border-b border-gray-700 px-10 py-6 flex justify-between items-center shadow-lg"
+    >
+      <div
+        class="text-orange-500 font-black text-3xl tracking-widest uppercase"
+      >
+        <a href="/">[INFO MLBB]</a>
+      </div>
+      <div class="flex space-x-10 text-lg font-bold tracking-wide">
+        <a href="/" class="text-orange-400">HERO</a>
+        <a
+          href="/kalkulator"
+          class="text-gray-400 hover:text-orange-400 transition duration-300"
+          >KALKULATOR</a
+        >
+      </div>
+    </nav>
+
+    <!-- KONTEN DETAIL HERO -->
+    <div class="flex-grow flex items-center justify-center p-6">
+      <div
+        class="bg-[#32323e] p-8 rounded-2xl shadow-2xl border border-gray-700 max-w-md w-full text-center relative overflow-hidden"
+      >
+        <div class="absolute top-0 left-0 w-full h-2 bg-orange-500"></div>
+
+        <img
+          src="<%= hero.portrait %>"
+          alt="<%= hero.hero_name %>"
+          class="w-32 h-32 mx-auto rounded-full mb-4 object-cover border-4 border-orange-500 shadow-xl"
+        />
+
+        <h1 class="text-3xl font-black text-white mb-1">
+          <%= hero.hero_name %>
+        </h1>
+        <span
+          class="inline-block bg-[#1e1e24] text-orange-400 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-6 border border-orange-500/30"
+        >
+          <%= hero.class %>
+        </span>
+
+        <div
+          class="bg-[#1e1e24] p-4 rounded-xl text-left border border-gray-700 space-y-3"
+        >
+          <p class="text-sm text-gray-400">
+            <strong class="text-gray-200">Rekomendasi Lane:</strong> High
+            Priority Meta
+          </p>
+          <p class="text-sm text-gray-400">
+            <strong class="text-gray-200">Tipe Serangan:</strong> Mekanik
+            Turnamen
+          </p>
+        </div>
+
+        <a
+          href="/"
+          class="block text-center mt-6 text-sm font-bold text-gray-400 hover:text-orange-500 transition duration-200"
+        >
+          ← Kembali ke Daftar Hero
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
