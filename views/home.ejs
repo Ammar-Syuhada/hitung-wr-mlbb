@@ -3,44 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLBB Hero Tracker</title>
+    <title>MLBB Hero Tracker - Meta Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #2b2b36; color: white; }
+        body { background-color: #1a1a22; color: #e2e8f0; }
+        .neon-card { 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neon-card:hover { 
+            border-color: rgba(249, 115, 22, 0.6); 
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.25);
+            transform: translateY(-5px);
+        }
     </style>
 </head>
-<body class="font-sans min-h-screen">
+<body class="font-sans min-h-screen flex flex-col">
 
-  <!-- NAVBAR LEBIH BESAR -->
-    <nav class="bg-[#1e1e24] border-b border-gray-700 px-10 py-6 flex justify-between items-center sticky top-0 z-50 shadow-lg">
-        <div class="text-orange-500 font-black text-3xl tracking-widest uppercase hover:scale-105 transition transform duration-200">
+    <nav class="bg-[#111116] border-b border-gray-800 px-8 py-5 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
+        <div class="text-orange-500 font-black text-2xl tracking-widest uppercase hover:scale-105 transition transform duration-200">
             <a href="/">[INFO MLBB]</a>
         </div>
-        <div class="flex space-x-10 text-lg font-bold tracking-wide">
-            <a href="/" class="text-orange-400 border-b-4 border-orange-400 pb-2">HERO</a>
+        <div class="flex space-x-8 text-md font-bold tracking-wide">
+            <a href="/" class="text-orange-400 border-b-2 border-orange-400 pb-1">HERO</a>
             <a href="/kalkulator" class="text-gray-400 hover:text-orange-400 transition duration-300">KALKULATOR</a>
         </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto p-8 pt-10">
-        <div class="border-b border-gray-600 pb-2 mb-6">
-            <h1 class="text-2xl font-bold">Daftar Meta Hero</h1>
+    <main class="max-w-7xl mx-auto p-6 md:p-10 w-full flex-grow">
+        
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-800 pb-5 mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-black tracking-tight text-white flex items-center gap-3">
+                    <span class="w-2 h-8 bg-gradient-to-b from-orange-500 to-red-600 rounded-sm"></span> 
+                    Daftar Meta Hero
+                </h1>
+                <p class="text-xs text-gray-400 mt-1 pl-5">Database pahlawan Land of Dawn paling relevan dalam turnamen</p>
+            </div>
+            
+            <div class="bg-[#1e1e26] border border-gray-800 px-4 py-2 rounded-xl flex items-center gap-3 shadow-md">
+                <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-xs font-mono text-gray-300">Total Meta: <strong class="text-orange-400 font-bold"><%= heroes.length %> Hero</strong></span>
+            </div>
         </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
             <% heroes.forEach(hero => { %>
-                <a href="/hero/<%= hero.hero_name.toLowerCase().replace(/\s+/g, '-') %>" class="block">
-                    <div class="bg-[#32323e] p-4 rounded-lg text-center hover:bg-gray-700 hover:scale-105 transition transform duration-200 cursor-pointer shadow-lg border border-gray-600 h-full flex flex-col justify-between">
+                <a href="/hero/<%= hero.hero_name.toLowerCase().replace(/\s+/g, '-') %>" class="block group">
+                    <div class="bg-[#1e1e26] p-4 rounded-2xl text-center neon-card h-full flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                        
                         <div>
-                            <img src="<%= hero.portrait %>" alt="<%= hero.hero_name %>" class="w-20 h-20 mx-auto rounded-full mb-3 object-cover border-2 border-orange-500">
-                            <h2 class="font-bold text-md truncate"><%= hero.hero_name %></h2>
+                            <div class="relative w-20 h-20 mx-auto mb-3">
+                                <img src="<%= hero.portrait %>" alt="<%= hero.hero_name %>" class="w-full h-full rounded-full object-cover border-2 border-orange-500/60 group-hover:border-orange-400 transition duration-300 shadow-lg">
+                            </div>
+                            <h2 class="font-bold text-white text-base truncate group-hover:text-orange-400 transition duration-200"><%= hero.hero_name %></h2>
                         </div>
-                        <p class="text-xs text-gray-400 uppercase tracking-wide mt-2"><%= hero.class %></p>
+                        
+                        <div class="mt-3 pt-2 border-t border-gray-800/80">
+                            <span class="inline-block bg-[#141419] text-gray-400 group-hover:text-orange-300 group-hover:bg-orange-500/10 text-[10px] font-mono font-bold px-2.5 py-1 rounded-md uppercase tracking-wider transition border border-gray-800 group-hover:border-orange-500/30">
+                                <%= hero.class %>
+                            </span>
+                        </div>
                     </div>
                 </a>
             <% }) %>
         </div>
-    </div>
+    </main>
+
+    <footer class="border-t border-gray-800 py-6 text-center text-xs text-gray-500 font-mono">
+        MLBB Hero Tracker &copy; 2026 - Continuous Deployment via Vercel
+    </footer>
 
 </body>
 </html>

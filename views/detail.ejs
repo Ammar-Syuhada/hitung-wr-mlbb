@@ -12,13 +12,13 @@
 </head>
 <body class="font-sans min-h-screen flex flex-col">
 
-    <!-- NAVBAR -->
-    <nav class="bg-[#111116] border-b border-gray-800 px-10 py-5 flex justify-between items-center shadow-2xl sticky top-0 z-50">
-        <div class="text-orange-500 font-black text-2xl tracking-widest uppercase">
+    <!-- NAVBAR KONSISTEN -->
+    <nav class="bg-[#111116] border-b border-gray-800 px-8 py-5 flex justify-between items-center shadow-2xl sticky top-0 z-50">
+        <div class="text-orange-500 font-black text-2xl tracking-widest uppercase hover:scale-105 transition transform duration-200">
             <a href="/">[INFO MLBB]</a>
         </div>
         <div class="flex space-x-8 text-md font-bold tracking-wide">
-            <a href="/" class="text-orange-400">HERO</a>
+            <a href="/" class="text-orange-400 border-b-2 border-orange-400 pb-1">HERO</a>
             <a href="/kalkulator" class="text-gray-400 hover:text-orange-400 transition duration-300">KALKULATOR</a>
         </div>
     </nav>
@@ -28,7 +28,7 @@
         
         <!-- KOLOM KIRI: PROFIL IDENTITAS -->
         <div class="space-y-6">
-            <div class="bg-[#1e1e26] p-6 rounded-2xl text-center neon-border relative overflow-hidden">
+            <div class="bg-[#1e1e26] p-6 rounded-2xl text-center neon-border relative overflow-hidden shadow-xl">
                 <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-500 to-red-600"></div>
                 <img src="<%= hero.portrait %>" alt="<%= hero.hero_name %>" class="w-32 h-32 mx-auto rounded-full mb-4 object-cover border-4 border-orange-500/80 shadow-2xl">
                 <h1 class="text-3xl font-black tracking-tight text-white mb-1"><%= hero.hero_name %></h1>
@@ -46,14 +46,13 @@
                 </div>
             </div>
 
-           <!-- KOTAK SYNERGY & COUNTER (GAMBAR ICON LIST BISA DI-KLIK) -->
-            <div class="bg-[#1e1e26] p-6 rounded-2xl neon-border space-y-6">
+            <!-- KOTAK SYNERGY & COUNTER -->
+            <div class="bg-[#1e1e26] p-6 rounded-2xl neon-border space-y-6 shadow-xl">
                 <div>
                     <h3 class="text-sm font-black uppercase text-red-400 tracking-wider mb-3">⚠️ Best Counters (Di-counter oleh):</h3>
                     <div class="flex flex-wrap gap-3">
                         <% if(counters.length > 0) { %>
                             <% counters.forEach(c => { %>
-                                <!-- MEMBUNGKUS ICON DENGAN LINK ROUTE DETAIL HERO -->
                                 <a href="/hero/<%= c.heroname.toLowerCase().replace(/\s+/g, '-') %>" class="group relative block">
                                     <img src="<%= c.portrait %>" alt="<%= c.heroname %>" class="w-12 h-12 rounded-full border-2 border-red-500/40 object-cover bg-gray-900 shadow-md transform group-hover:scale-110 group-hover:border-red-500 transition duration-200">
                                     <span class="absolute bottom-full left-1/2 -translate-x-1/2 bg-black text-[10px] text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition whitespace-nowrap mb-1 z-10 shadow-lg"><%= c.heroname %></span>
@@ -70,7 +69,6 @@
                     <div class="flex flex-wrap gap-3">
                         <% if(synergies.length > 0) { %>
                             <% synergies.forEach(s => { %>
-                                <!-- MEMBUNGKUS ICON DENGAN LINK ROUTE DETAIL HERO -->
                                 <a href="/hero/<%= s.heroname.toLowerCase().replace(/\s+/g, '-') %>" class="group relative block">
                                     <img src="<%= s.portrait %>" alt="<%= s.heroname %>" class="w-12 h-12 rounded-full border-2 border-green-500/40 object-cover bg-gray-900 shadow-md transform group-hover:scale-110 group-hover:border-green-500 transition duration-200">
                                     <span class="absolute bottom-full left-1/2 -translate-x-1/2 bg-black text-[10px] text-white px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition whitespace-nowrap mb-1 z-10 shadow-lg"><%= s.heroname %></span>
@@ -84,7 +82,7 @@
             </div>
         </div>
 
-        <!-- KOLOM KANAN: LIST DETAIL SKILL (GRID 2 KOLOM) -->
+        <!-- KOLOM KANAN: LIST DETAIL SKILL -->
         <div class="lg:col-span-2 space-y-4">
             <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2 mb-2">
                 <span class="w-2 h-6 bg-orange-500 rounded-sm"></span> Informasi Detail Skill Hero
@@ -92,8 +90,6 @@
             
             <div class="space-y-4">
                 <%
-                    // Hitung urutan skill aktif (skill 1, skill 2, dst) dan tandai yang terakhir sebagai ULTI.
-                    // Otomatis menyesuaikan walau hero punya lebih dari 3 skill aktif (mis. 4 skill aktif).
                     const activeSkills = (hero.skills || []).filter(sk => sk.type !== 'passive');
                     const getSkillLabel = (skill) => {
                         if (skill.type === 'passive') return 'PASIF';
@@ -119,7 +115,6 @@
                             </div>
                             <p class="text-sm text-gray-400 leading-relaxed text-justify pt-1 border-t border-gray-800/60"><%= skill.description %></p>
                         </div>
-
                     </div>
                 <% }) %>
             </div>
@@ -131,6 +126,10 @@
             </div>
         </div>
     </main>
+
+    <footer class="border-t border-gray-800/80 py-6 text-center text-xs text-gray-500 font-mono">
+        MLBB Hero Tracker &copy; 2026 - Continuous Deployment via Vercel
+    </footer>
 
 </body>
 </html>
